@@ -19,7 +19,9 @@ namespace PlantDiary21FS7024002.Pages
 
         public void OnGet()
         {
-
+            int yearStarted = 2006;
+            string subTitle = "My Plant Diary, Established " + yearStarted;
+            ViewData["SubTitle"] = subTitle;
         }
     }
 }
