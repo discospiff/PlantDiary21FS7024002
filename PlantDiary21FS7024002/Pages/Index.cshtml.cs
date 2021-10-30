@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using plantfeed;
 using specimenfeed;
 
 namespace PlantDiary21FS7024002.Pages
@@ -33,6 +34,18 @@ namespace PlantDiary21FS7024002.Pages
             // open a resource to grab data from the Internet.
             using (var webClient = new WebClient())
             {
+                // get our plants that are thirsty.
+                string plantsJSON = webClient.DownloadString("http://plantplaces.com/perl/mobile/viewplantsjsonarray.pl?WetTolerant=on");
+                
+                // put thirsty plants into collection.
+                List <Plant> plants = Plant.FromJson(plantsJSON);
+                // read all of the plants into a dictionary for quick access.
+                IDictionary<long, Plant> allPlants = new Dictionary<long, Plant>();
+                foreach(Plant plant in plants)
+                {
+                    allPlants.Add(plant.Id, plant);
+                }
+
                 // grab the raw JSON data
                 String specimenJSON = webClient.DownloadString("https://www.plantplaces.com/perl/mobile/viewspecimenlocations.pl?Lat=39.14455075&Lng=-84.5093939666667&Range=0.5&Source=location&Version=2");
                 // read the JSON data, convert it to objects.
@@ -40,8 +53,18 @@ namespace PlantDiary21FS7024002.Pages
                 SpecimenCollection specimenCollection = specimenfeed.SpecimenCollection.FromJson(specimenJSON);
                 // get the raw list of specimesn from the specimen collection.
                 List < Specimen > specimens = specimenCollection.Specimens;
+                List<Specimen> waterMeSpecimens = new List<Specimen>();
+                foreach(Specimen specimen in specimens)
+                {
+                    if (allPlants.ContainsKey(specimen.PlantId))
+                    {
+                        // add to our collection of water loving plants.
+                        waterMeSpecimens.Add(specimen);
+                    }
+                }
                 // make the specimens available to our cshtml page.
-                ViewData["Specimens"] = specimens;
+                ViewData["Specimens"] = waterMeSpecimens;
+
             }
 
         }
