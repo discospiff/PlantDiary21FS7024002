@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using plantfeed;
 using specimenfeed;
+using weatherfeed;
 
 namespace PlantDiary21FS7024002.Pages
 {
@@ -34,6 +35,28 @@ namespace PlantDiary21FS7024002.Pages
             // open a resource to grab data from the Internet.
             using (var webClient = new WebClient())
             {
+                // get our key.
+                string key = System.IO.File.ReadAllText("WeatherAPIKey.txt");
+
+                // read the weather data.
+                string weatherJSON = webClient.DownloadString("https://api.weatherbit.io/v2.0/current?&city=Cincinnati&country=USA&key=" + key);
+                Weather weathers = Weather.FromJson(weatherJSON);
+                // is it raining?
+                long precip = 0;
+                foreach(weatherfeed.Datum weather in weathers.Data)
+                {
+                    precip = weather.Precip;
+                    if (precip < 1)
+                    {
+                        // no precip, we need to water.
+                        ViewData["Weather"] = "Need to water";
+                    } else
+                    {
+                        ViewData["Weather"] = "Don't need to water";
+                    }
+                }
+
+
                 // get our plants that are thirsty.
                 string plantsJSON = webClient.DownloadString("http://plantplaces.com/perl/mobile/viewplantsjsonarray.pl?WetTolerant=on");
                 
