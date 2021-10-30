@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using plantfeed;
 using specimenfeed;
 using weatherfeed;
@@ -76,18 +78,35 @@ namespace PlantDiary21FS7024002.Pages
                 SpecimenCollection specimenCollection = specimenfeed.SpecimenCollection.FromJson(specimenJSON);
                 // get the raw list of specimesn from the specimen collection.
                 List < Specimen > specimens = specimenCollection.Specimens;
-                List<Specimen> waterMeSpecimens = new List<Specimen>();
-                foreach(Specimen specimen in specimens)
-                {
-                    if (allPlants.ContainsKey(specimen.PlantId))
+                JSchema schema = JSchema.Parse(System.IO.File.ReadAllText("SpecimenSchema.json"));
+                JObject jsonObject = JObject.Parse(specimenJSON);
+                IList<string> validationEvents = new List<string>();
+                if (jsonObject.IsValid(schema, out validationEvents)) {
+                    // everthing is valid.  Let's move on 
+                    List<Specimen> waterMeSpecimens = new List<Specimen>();
+                    foreach (Specimen specimen in specimens)
                     {
-                        // add to our collection of water loving plants.
-                        waterMeSpecimens.Add(specimen);
+                        if (allPlants.ContainsKey(specimen.PlantId))
+                        {
+                            // add to our collection of water loving plants.
+                            waterMeSpecimens.Add(specimen);
+                        }
+                    }
+                    // make the specimens available to our cshtml page.
+                    ViewData["Specimens"] = waterMeSpecimens;
+
+                }
+                else
+                {
+                    ViewData["Specimens"] = new List<Specimen>();
+                    String error = "";
+                    foreach(string evt in validationEvents)
+                    {
+                        error = error + evt;
+                        ViewData["Error"] = error;
                     }
                 }
-                // make the specimens available to our cshtml page.
-                ViewData["Specimens"] = waterMeSpecimens;
-
+               
             }
 
         }
