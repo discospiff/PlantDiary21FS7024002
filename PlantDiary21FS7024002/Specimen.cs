@@ -4,23 +4,24 @@
 //
 //    using specimenfeed;
 //
-//    var specimen = Specimen.FromJson(jsonString);
+//    var specimenCollection = SpecimenCollection.FromJson(jsonString);
 
 namespace specimenfeed
 {
     using System;
     using System.Collections.Generic;
+
     using System.Globalization;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    public partial class Specimen
+    public partial class SpecimenCollection
     {
         [JsonProperty("specimens")]
-        public SpecimenElement[] Specimens { get; set; }
+        public List<Specimen> Specimens { get; set; }
     }
 
-    public partial class SpecimenElement
+    public partial class Specimen
     {
         [JsonProperty("lat")]
         public double Lat { get; set; }
@@ -50,15 +51,15 @@ namespace specimenfeed
         public string Notes { get; set; }
     }
 
-    public partial class Specimen
+    public partial class SpecimenCollection
     {
-public static Specimen FromJson(string json) => JsonConvert.DeserializeObject<Specimen>(json, specimenfeed.Converter.Settings);
-}
+        public static SpecimenCollection FromJson(string json) => JsonConvert.DeserializeObject<SpecimenCollection>(json, specimenfeed.Converter.Settings);
+    }
 
     public static class Serialize
     {
-        public static string ToJson(this Specimen self) => JsonConvert.SerializeObject(self, specimenfeed.Converter.Settings);
-}
+        public static string ToJson(this SpecimenCollection self) => JsonConvert.SerializeObject(self, specimenfeed.Converter.Settings);
+    }
 
     internal static class Converter
     {
