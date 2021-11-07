@@ -24,7 +24,7 @@ namespace PlantDiary21FS7024002.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public void OnGet() 
         {
             GenerateBrand();
 
