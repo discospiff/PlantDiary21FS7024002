@@ -4,8 +4,8 @@
 }
 
 #topnav {
-    background-color: #F6C467;
-    color: #8C3A50;
+    background-color: #8C3A50;
+    color: #F6C467;
     border: dotted;
     margin-top: 0px;
     top: 0;
@@ -13,7 +13,8 @@
     position: fixed;
     width: 100%;
     z-index: 100;
-    height:3em;
+    height: 3em;
+    padding:0px;
 }
 
 .content {
