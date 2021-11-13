@@ -1,0 +1,16 @@
+﻿body {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+#topnav {
+    display:none;
+}
+
+.content {
+    position:relative;
+    margin-top: 4em;
+}
+.mobile {
+    display:none;
+}
