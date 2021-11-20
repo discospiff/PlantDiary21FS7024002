@@ -2,10 +2,12 @@
 @model PlantDiary21FS7024002.Pages.UploadModel
 @{
     ViewData["Title"] = "Consume XML";
+    var result = ViewData["Result"];
 }
 
 <h1>Consume XML</h1>
 <p>Uplolad your plant XML file!</p>
+<p>Result : @result</p>
 <form method="post" enctype="multipart/form-data">
     <input type="file" asp-for="Upload"/>
     <input type="submit"/>
