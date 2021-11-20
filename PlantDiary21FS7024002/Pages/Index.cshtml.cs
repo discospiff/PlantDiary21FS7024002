@@ -27,7 +27,7 @@ namespace PlantDiary21FS7024002.Pages
         public void OnGet() 
         {
             GenerateBrand();
-
+            /*
             // open a resource to grab data from the Internet.
             using (var webClient = new WebClient())
             {
@@ -105,7 +105,8 @@ namespace PlantDiary21FS7024002.Pages
                 }
 
             }
-
+            */
+            ViewData["Specimens"] = new List<Specimen>();
         }
 
         /// <summary>
