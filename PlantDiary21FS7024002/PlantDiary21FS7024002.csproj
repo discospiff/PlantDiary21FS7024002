@@ -5,6 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\plants.xml" />
+    <Content Remove="wwwroot\plants.xsd" />
+    <Content Remove="wwwroot\plants.xsl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\plants.xml" />
+    <None Include="wwwroot\plants.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="wwwroot\plants.xsl" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
   </ItemGroup>
